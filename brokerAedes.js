@@ -1,8 +1,12 @@
+const { json } = require('express');
+
 const aedes = require('aedes')();
 const server = require('net').createServer(aedes.handle);
 const port = 1883;
 
-const agvs = {};
+const agvs = {}; //store status && next two steps EX: { 'agv:635d0a8ea891b7cbba452e5a': { status: 'move', nextSteps: [ [Array], [Array], [Array] ] },
+//                                                      'agv:635d0a8ea891b7cbba452e5f': { status: 'move', nextSteps: [ [Array], [Array], [Array] ] } }
+const doors = {}; //store status && entry points   EX:  door635d0a51a891b7cbba451ea6: { entries: [ [1,2], [2,3], [122,32], [12,32] ], status: 'close' }
 
 server.listen(port, function () {
   console.log('Aedes Broker started and listening on port ', port);
@@ -81,6 +85,40 @@ aedes.on('publish', function (packet, client) {
           topic: `${agv}:control`,
           payload: 'move',
         });
+      }
+
+      const step = fullRoute[currentStep].toString();
+      for (let key in doors) {
+        const entries = doors[key]['entries'];
+        // console.log(entries.toString(), key);
+        for (let entry of entries) {
+          if (step === entry.toString()) {
+            console.log('open door', entries);
+            aedes.publish({
+              topic: `${key}:control`,
+              payload: 'open',
+            });
+          }
+        }
+      }
+    }
+
+    if (topic === 'allDoors') {
+      let message = packet.payload.toString();
+      message = JSON.parse(message);
+
+      const doorObj = {};
+      for (let i = 0; i < message.length; i++) {
+        const doorKey = 'door:' + message[i]._id;
+        const entriesArr = [];
+        const entries = message[i]['entries'];
+
+        for (let entry of entries)
+          entriesArr.push([entry['entryX'], entry['entryY']]);
+
+        doorObj['entries'] = JSON.parse(JSON.stringify(entriesArr));
+        doorObj['status'] = message[i]['status'];
+        doors[doorKey] = { ...doorObj };
       }
     }
   }
