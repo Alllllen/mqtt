@@ -15,10 +15,10 @@
   ```
 ## git
   ```sh
-  yum install git
+  sudo yum install git
   ```
   ```sh
-  git — version 
+  git version 
   ```
   ```sh
   git clone https://github.com/Alllllen/mqtt.git
