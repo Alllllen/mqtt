@@ -23,5 +23,14 @@
   ```sh
   git clone https://github.com/Alllllen/mqtt.git
   ```
-  
+  ## Run Mosca
+  ```sh
+  cd mqtt
+  ```
+  ```sh
+  npm i 
+  ```
+  ```sh
+  node brokerAedes.js
+  ```
   
