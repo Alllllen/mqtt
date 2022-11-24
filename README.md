@@ -13,6 +13,26 @@
   node -v
   npm -v
   ```
+  ## docker on EC2 AWSLinux
+  ```sh
+  sudo yum update -y
+  ```
+  ```sh
+  sudo amazon-linux-extras install docker
+  ```
+  ```sh
+  sudo service docker start
+  ```
+  ```sh
+  sudo systemctl enable docker
+  ```
+  ```sh
+  sudo usermod -a -G docker ec2-user
+  ```
+  reopen ssh connect
+  ```sh
+  docker info
+  ```
 ## git
   ```sh
   sudo yum install git
