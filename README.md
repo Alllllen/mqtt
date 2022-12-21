@@ -33,6 +33,19 @@
   ```sh
   docker info
   ```
+  ## docker compose on EC2 AWSLinux
+  ```sh
+  sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+  ```
+  ```sh
+  sudo chmod +x /usr/local/bin/docker-compose
+  ```
+  ```sh
+  sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  ```
+  ```sh
+  docker-compose --version
+  ```
 ## git
   ```sh
   sudo yum install git
